@@ -20,7 +20,7 @@ You can use build-in client function for items
 * Beer()
 * Coffe()
 * BoostStamina(10)
-* 
+ 
 or write own code in ClientAction function
 
 ```
