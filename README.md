@@ -46,6 +46,8 @@ TriggerServerEvent('redemrp_status:AddAmount', hunger , thirst)
 TriggerServerEvent('redemrp_status:AddAmount', 0 , 25)
 ```
 
+
+![alt text](https://i.imgur.com/Pfi4dAj.png)
 ## 3. Credits
 [Ktos93](http://github.com/Ktos93)
 
