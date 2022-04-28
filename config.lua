@@ -38,5 +38,16 @@ Config.Items = {
         end
     },
 
+    ["apple"] = {
+        hunger = 18,
+        thirst = 0,
+        action = function(source, name)
+            TriggerClientEvent('redemrp_status:Action-' .. name, source)
+        end,
+        ClientAction = function()
+            Eat()
+            BoostStamina(20)
+        end
+    },
 
 }
