@@ -1,5 +1,6 @@
 # redemrp_status
 A status, basic needs system for RedEM:RP Framework
+Heavily modified version of redemrp_status that includes horse buffers and item animations
 
 ## 1. Requirements
 
@@ -45,10 +46,3 @@ You can also use server event to add thirst and hunger from other scripts
 TriggerServerEvent('redemrp_status:AddAmount', hunger , thirst)
 TriggerServerEvent('redemrp_status:AddAmount', 0 , 25)
 ```
-
-
-![alt text](https://i.imgur.com/Pfi4dAj.png)
-## 3. Credits
-[Ktos93](http://github.com/Ktos93)
-
-Join discord to get support! - https://discord.gg/FKH4uwb
