@@ -14,7 +14,7 @@ Config.Items = {
 
     ["water"] = {
         hunger = 0,
-        thirst = 25,
+        thirst = 13,
         action = function(source, name)
             TriggerClientEvent('redemrp_status:Action-' .. name, source)
         end,
@@ -26,8 +26,20 @@ Config.Items = {
         end
     },
 
+    ["lemonade"] = {
+        hunger = 0,
+        thirst = 25,
+        action = function(source, name)
+            TriggerClientEvent('redemrp_status:Action-' .. name, source)
+        end,
+        ClientAction = function()
+            Drink()
+            BoostStamina(20)
+        end
+    },
+
     ["bread"] = {
-        hunger = 25,
+        hunger = 20,
         thirst = 0,
         action = function(source, name)
             TriggerClientEvent('redemrp_status:Action-' .. name, source)
@@ -39,7 +51,7 @@ Config.Items = {
     },
 
     ["apple"] = {
-        hunger = 18,
+        hunger = 15,
         thirst = 0,
         action = function(source, name)
             TriggerClientEvent('redemrp_status:Action-' .. name, source)
