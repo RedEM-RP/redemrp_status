@@ -1,3 +1,8 @@
+local cooldown = 0
+local usingb = false
+local temp2 = 0
+local cooldown2 = 0
+
 Citizen.CreateThread(function()
     while true do
         Wait(10)
@@ -268,6 +273,509 @@ Citizen.CreateThread(function()
     end
 end)
 
+RegisterNetEvent('redemrp_status:StartBandage')
+AddEventHandler('redemrp_status:StartBandage', function(name)
+    local playerPed = PlayerPedId()
+    if cooldown == 0 and not usingb then
+        usingb = true
+	TriggerServerEvent("ak_herbs:Delete" , name)
+        TaskStartScenarioInPlace(playerPed, GetHashKey('WORLD_HUMAN_CROUCH_INSPECT'), 10000, true, false, false, false)
+        exports['progressBars']:startUI(10000, 'Bandaging...')
+        Wait(10000)
+        cooldown = 3000
+        startCooldown()
+       		--print(GetAttributeCoreValue(playerPed, 0 ))
+         if GetAttributeCoreValue(playerPed, 0) + 30 <= 100 then
+		 local addhp = GetAttributeCoreValue(playerPed, 0) + 30
+			  Citizen.InvokeNative( 0xC6258F41D86676E0 ,playerPed, 0 ,addhp )
+		else
+			  Citizen.InvokeNative( 0xC6258F41D86676E0 , playerPed, 0 ,100)
+        end		
+		--print(GetAttributeCoreValue(playerPed, 0 ))
+        usingb = false
+    else
+		Wait(1000)
+        TriggerEvent("redemrp_notification:start", "You have to wait: " .. cooldown/100 .. "seconds before applying another bandage!", 2, "error")
+		 -- TriggerEvent("redemrp_notification:start", "You have to wait: " .. cooldown/100 .. "seconds before applying another bandage!", 2, "error")
+    end
+end)
+RegisterNetEvent('redemrp_status:StartBandageZiolowy')
+AddEventHandler('redemrp_status:StartBandageZiolowy', function(name)
+    local playerPed = PlayerPedId()
+    if cooldown == 0 and not usingb then
+        usingb = true
+	TriggerServerEvent("ak_herbs:Delete" , name)
+        TaskStartScenarioInPlace(playerPed, GetHashKey('WORLD_HUMAN_CROUCH_INSPECT'), 10000, true, false, false, false)
+        exports['progressBars']:startUI(10000, 'Bandaging...')
+        Wait(10000)
+        cooldown = 3000
+        startCooldown()
+		Citizen.InvokeNative( 0xC6258F41D86676E0 , playerPed, 0 ,100)	
+        usingb = false
+    else
+	Wait(1000)
+        TriggerEvent("redemrp_notification:start", "You have to wait: " .. cooldown/100 .. "seconds before applying another bandage!", 2, "error")
+		--  TriggerEvent("redemrp_notification:start", "You have to wait: " .. cooldown/100 .. "seconds before applying another bandage!", 2, "error")
+    end
+end)
+function startCooldown()
+    Citizen.CreateThread(function()
+        while cooldown > 0 do
+            Wait(0)
+            cooldown = cooldown - 1
+        end
+    end)
+end
+
+RegisterNetEvent('redemrp_status:StartCigar')
+AddEventHandler('redemrp_status:StartCigar', function()
+    TriggerEvent("ak_smoking:Start", "p_cigar01x")
+end)
+RegisterNetEvent('redemrp_status:Bagienne')
+AddEventHandler('redemrp_status:Bagienne', function()
+	AnimpostfxPlay("PlayerOverpower")
+	AnimpostfxPlay("PlayerDrugsPoisonWell")
+	Citizen.InvokeNative( 0xF6A7C08DF2E28B28, PlayerPedId(), 0, 350.0, true )
+    Citizen.InvokeNative( 0xF6A7C08DF2E28B28, PlayerPedId(), 1, 2000.0, true )
+	Wait(1000)
+	TriggerEvent("prop:cigarettes")
+	--TriggerEvent("ak_smoking:Start")
+	Wait(60000)
+	AnimpostfxStop("PlayerDrugsPoisonWell")
+end)
+
+RegisterNetEvent('redemrp_status:StartCigarette')
+AddEventHandler('redemrp_status:StartCigarette', function()
+    TriggerEvent("ak_smoking:Start", "p_cigarette_cs01x")
+end)
+
+
+
+RegisterNetEvent('redemrp_status:StartWhisky')
+AddEventHandler('redemrp_status:StartWhisky', function()
+	TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('p_bottleJD01x'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    test = propEntity
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), -1199896558 , propEntity, GetHashKey('p_bottleJD01x_ph_r_hand'), GetHashKey('DRINK_BOTTLE@Bottle_Cylinder_D1-3_H30-5_Neck_A13_B2-5_CHUG_TRANS'), 1, 0, -1.0)
+    while true do
+        Wait(500)
+        if  Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1204708816 then
+            amount = amount + 1
+            if amount >= 11 then
+                TriggerEvent("tor_moonshiners:DrunkEffect","moonshine")
+				if GetAttributeCoreValue(PlayerPedId(), 1) + 30 <= 100 then
+					local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + 30
+					Citizen.InvokeNative( 0xC6258F41D86676E0 ,PlayerPedId(), 1 ,addstamina )
+				else
+					Citizen.InvokeNative( 0xC6258F41D86676E0 , PlayerPedId(), 1 ,100)
+				end		
+
+                break
+            end
+			elseif  Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+				break	
+        else
+            amount = 0
+        end
+    end
+end)
+
+RegisterNetEvent('redemrp_status:StartBeer')
+AddEventHandler('redemrp_status:StartBeer', function()
+	TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('p_bottleBeer01x'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    test = propEntity
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), GetHashKey("CONSUMABLE_SALOON_BEER") , propEntity, GetHashKey('p_bottleBeer01x_PH_R_HAND'),  1587785400, 1, 0, -1082130432)
+    while true do
+        Wait(500)
+        if  Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1183277175 then
+            amount = amount + 1
+            if amount >= 11 then
+                TriggerEvent("tor_moonshiners:DrunkEffect","beer")
+				if GetAttributeCoreValue(PlayerPedId(), 1) + 30 <= 100 then
+					local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + 30
+					Citizen.InvokeNative( 0xC6258F41D86676E0 ,PlayerPedId(), 1 ,addstamina )
+				else
+					Citizen.InvokeNative( 0xC6258F41D86676E0 , PlayerPedId(), 1 ,100)
+				end		
+                break
+            end
+		elseif  Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+			break	
+        else
+            amount = 0
+        end
+    end
+end)
+
+RegisterNetEvent('redemrp_status:StartWine')
+AddEventHandler('redemrp_status:StartWine', function()
+	TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('P_BOTTLEJD01X'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    test = propEntity
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), -1679900928, propEntity, GetHashKey('P_BOTTLEJD01X_PH_R_HAND'), -68870885, 1, 0, -1082130432)
+    while true do
+        Wait(500)
+        if  Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1204708816 then
+            amount = amount + 1
+            if amount >= 11 then
+                TriggerEvent("tor_moonshiners:DrunkEffect","beer")
+                --ClearPedTasks(PlayerPedId())
+				if GetAttributeCoreValue(PlayerPedId(), 1) + 30 <= 100 then
+					local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + 30
+					Citizen.InvokeNative( 0xC6258F41D86676E0 ,PlayerPedId(), 1 ,addstamina )
+				else
+					Citizen.InvokeNative( 0xC6258F41D86676E0 , PlayerPedId(), 1 ,100)
+				end
+                break
+            end
+		elseif  Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+			break
+        else
+            amount = 0
+        end
+    end
+end)
+
+RegisterNetEvent('redemrp_status:StartSzampan')
+AddEventHandler('redemrp_status:StartSzampan', function()
+	TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('P_GLASS001X'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    test = propEntity
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), GetHashKey("CONSUMABLE_WHISKEY") , propEntity, GetHashKey('P_GLASS001X_PH_R_HAND'), GetHashKey("DRINK_CHAMPAGNE_HOLD"), 1, 0, -1082130432)
+    while true do
+        Wait(500)
+        if  Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 642357238 then
+            amount = amount + 1
+            if amount >= 7 then
+                TriggerEvent("tor_moonshiners:DrunkEffect","beer")
+                ClearPedTasks(PlayerPedId())
+				if GetAttributeCoreValue(PlayerPedId(), 1) + 30 <= 100 then
+					local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + 30
+					Citizen.InvokeNative( 0xC6258F41D86676E0 ,PlayerPedId(), 1 ,addstamina )
+				else
+					Citizen.InvokeNative( 0xC6258F41D86676E0 , PlayerPedId(), 1 ,100)
+				end
+                break
+            end
+		elseif  Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+			break
+        else
+            amount = 0
+        end
+    end
+end)
+
+
+
+RegisterNetEvent('redemrp_status:StartMoonshine')
+AddEventHandler('redemrp_status:StartMoonshine', function()
+    local dict = "amb_rest_drunk@world_human_drinking@male_a@idle_a"
+    local playerPed = PlayerPedId()
+    local pos = GetEntityCoords(playerPed)
+    local prop = GetHashKey("P_BOTTLE008X")
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Citizen.Wait(10)
+    end
+
+    while not HasModelLoaded( prop ) do
+        Wait(500)
+        modelrequest( prop )
+    end
+    local tempObj2 = CreateObject(prop, pos.x, pos.y, pos.z, true, true, false)
+    local boneIndex = GetEntityBoneIndexByName(playerPed, "SKEL_R_HAND")
+    AttachEntityToEntity(tempObj2, playerPed, boneIndex, 0.05, -0.07, -0.05, -75.0, 60.0, 0.0, true, true, false, true, 1, true)
+    TaskPlayAnim(PlayerPedId(), dict, "idle_a", 1.0, 8.0, -1, 31, 0, false, false, false)
+    Citizen.Wait(4000)
+    ClearPedTasks(PlayerPedId())
+    DeleteObject(tempObj2)
+    TriggerEvent("tor_moonshiners:DrunkEffect","moonshine")
+	if GetAttributeCoreValue(PlayerPedId(), 1) + 50 <= 100 then
+		local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + 50
+		Citizen.InvokeNative( 0xC6258F41D86676E0 ,PlayerPedId(), 1 ,addstamina )
+	else
+		Citizen.InvokeNative( 0xC6258F41D86676E0 , PlayerPedId(), 1 ,100)
+	end	
+    SetModelAsNoLongerNeeded(prop)
+end)
+
+RegisterNetEvent('redemrp_status:drinking')
+AddEventHandler('redemrp_status:drinking', function()
+    Citizen.CreateThread(function()
+        SendNUIMessage({
+            showhud = true
+        })
+        local dict = "amb_rest_drunk@world_human_drinking@male_a@idle_a"
+        local playerPed = PlayerPedId()
+        local pos = GetEntityCoords(playerPed)
+        local prop = GetHashKey("P_BOTTLE008X")
+        RequestAnimDict(dict)
+        while not HasAnimDictLoaded(dict) do
+            Citizen.Wait(10)
+        end
+
+        while not HasModelLoaded( prop ) do
+            Wait(500)
+            modelrequest( prop )
+        end
+        local tempObj2 = CreateObject(prop, pos.x, pos.y, pos.z, true, true, false)
+        local boneIndex = GetEntityBoneIndexByName(playerPed, "SKEL_R_HAND")
+        AttachEntityToEntity(tempObj2, playerPed, boneIndex, 0.05, -0.07, -0.05, -75.0, 60.0, 0.0, true, true, false, true, 1, true)
+        TaskPlayAnim(PlayerPedId(), dict, "idle_a", 1.0, 8.0, -1, 31, 0, false, false, false)
+        Citizen.Wait(4000)
+        ClearPedTasks(PlayerPedId())
+        DeleteObject(tempObj2)
+		if GetAttributeCoreValue(PlayerPedId(), 1) + 50 <= 100 then
+			local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + 50
+			Citizen.InvokeNative( 0xC6258F41D86676E0 ,PlayerPedId(), 1 ,addstamina )
+		else
+			Citizen.InvokeNative( 0xC6258F41D86676E0 , PlayerPedId(), 1 ,100)
+		end		
+        SendNUIMessage({
+            showhud = false
+        })
+        SetModelAsNoLongerNeeded(prop)
+    end)
+end)
+RegisterNetEvent('redemrp_status:stew')
+AddEventHandler('redemrp_status:stew', function()
+TriggerEvent("redemrp_inventory:closeinv")
+        SendNUIMessage({
+            showhud = true
+        })
+local bowl = CreateObject("p_bowl04x_stew", GetEntityCoords(PlayerPedId()), true, true, false, false, true)
+local spoon = CreateObject("p_spoon01x", GetEntityCoords(PlayerPedId()), true, true, false, false, true)
+
+Citizen.InvokeNative(0x669655FFB29EF1A9, bowl, 0, "Stew_Fill", 1.0)
+Citizen.InvokeNative(0xCAAF2BCCFEF37F77, bowl, 20)
+
+Citizen.InvokeNative(0xCAAF2BCCFEF37F77, spoon, 82)
+
+TaskItemInteraction_2(PlayerPedId(), 599184882, bowl, GetHashKey("p_bowl04x_stew_ph_l_hand"), -583731576, 1, 0, -1.0)
+TaskItemInteraction_2(PlayerPedId(), 599184882, spoon, GetHashKey("p_spoon01x_ph_r_hand"), -583731576, 1, 0, -1.0)
+
+Citizen.InvokeNative(0xB35370D5353995CB, PlayerPedId(), -583731576, 1.0)
+Wait(3000)
+if GetAttributeCoreValue(PlayerPedId(), 1) + 25 <= 100 then
+			local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + 25
+			Citizen.InvokeNative( 0xC6258F41D86676E0 ,PlayerPedId(), 1 ,addstamina )
+		else
+			Citizen.InvokeNative( 0xC6258F41D86676E0 , PlayerPedId(), 1 ,100)
+		end		
+SendNUIMessage({
+            showhud = false
+        })
+end)
+
+RegisterNetEvent('redemrp_status:drinkingfromsea')
+AddEventHandler('redemrp_status:drinkingfromsea', function()
+    Citizen.CreateThread(function()
+	if GetAttributeCoreValue(PlayerPedId(), 1) + 30 <= 100 then
+			local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + 30
+			Citizen.InvokeNative( 0xC6258F41D86676E0 ,PlayerPedId(), 1 ,addstamina )
+		else
+			Citizen.InvokeNative( 0xC6258F41D86676E0 , PlayerPedId(), 1 ,100)
+		end		
+        SendNUIMessage({
+            showhud = true
+        })
+        Citizen.Wait(4000)
+        SendNUIMessage({
+            showhud = false
+        })
+		
+    end)
+end)
+
+
+RegisterNetEvent('redemrp_status:eating')
+AddEventHandler('redemrp_status:eating', function()
+    Citizen.CreateThread(function()
+        SendNUIMessage({
+            showhud = true
+        })
+        local dict = "mech_inventory@eating@multi_bite@sphere_d8-2_sandwich"
+        local playerPed = PlayerPedId()
+        local pos = GetEntityCoords(playerPed)
+        local prop = GetHashKey("P_BREAD05X")
+        RequestAnimDict(dict)
+        while not HasAnimDictLoaded(dict) do
+            Citizen.Wait(10)
+        end
+
+        while not HasModelLoaded( prop ) do
+            Wait(500)
+            modelrequest( prop )
+        end
+        local tempObj2 = CreateObject(prop, pos.x, pos.y, pos.z, true, true, false)
+        local boneIndex = GetEntityBoneIndexByName(playerPed, "SKEL_R_HAND")
+        AttachEntityToEntity(tempObj2, playerPed, boneIndex, 0.1, -0.01, -0.07, -90.0, 100.0, 0.0, true, true, false, true, 1, true)
+        TaskPlayAnim(PlayerPedId(), dict, "quick_right_hand", 1.0, 8.0, -1, 31, 0, false, false, false)
+        Citizen.Wait(2000)
+        ClearPedTasks(PlayerPedId())
+        DeleteObject(tempObj2)
+        SendNUIMessage({
+            showhud = false
+        })
+        SetModelAsNoLongerNeeded(prop)
+    end)
+end)
+
+
+----Uncomment to allow placement of a camera prop, change cords to wherever you want, link to coords or usable item, your choice, code all works.
+
+
+
+-- -- Citizen.CreateThread(function()
+-- -- 	while true do
+-- -- 		Citizen.Wait(1)
+-- -- 		local coords = GetEntityCoords(PlayerPedId())
+-- --     if (Vdist(coords.x, coords.y, coords.z, -286.3942, 796.4553, 118.8803) < 2.0) then
+-- --             DrawTxt("Press [~e~G~q~] to Place Camera.", 0.50, 0.85, 0.7, 0.7, true, 255, 255, 255, 255, true)
+-- --             if IsControlJustReleased(0, 0x760A9C6F) then -- g
+-- --                 TriggerEvent("camera:deploy")
+-- --                 ----print('openedwarmenu')
+
+-- --             end
+-- --         end
+-- --     end
+-- -- end)
+
+-- function DrawTxt(str, x, y, w, h, enableShadow, col1, col2, col3, a, centre)
+--     local str = CreateVarString(10, "LITERAL_STRING", str, Citizen.ResultAsLong())
+--    SetTextScale(w, h)
+--    SetTextColor(math.floor(col1), math.floor(col2), math.floor(col3), math.floor(a))
+--    SetTextCentre(centre)
+--    if enableShadow then SetTextDropshadow(1, 0, 0, 0, 255) end
+--    Citizen.InvokeNative(0xADA9255D, 10);
+--    DisplayText(str, x, y)
+-- end
+
+
+
+
+function FPrompt(text, button, hold)
+    Citizen.CreateThread(function()
+        proppromptdisplayed=false
+        PropPrompt=nil
+        local str = text or "Put Away"
+        local buttonhash = button or 0x3B24C470
+        local holdbutton = hold or false
+        PropPrompt = PromptRegisterBegin()
+        PromptSetControlAction(PropPrompt, buttonhash)
+        str = CreateVarString(10, 'LITERAL_STRING', str)
+        PromptSetText(PropPrompt, str)
+        PromptSetEnabled(PropPrompt, false)
+        PromptSetVisible(PropPrompt, false)
+        PromptSetHoldMode(PropPrompt, holdbutton)
+        PromptRegisterEnd(PropPrompt)
+    end)
+end
+
+function LMPrompt(text, button, hold)
+    Citizen.CreateThread(function()
+        UsePrompt=nil
+        local str = text or "Use"
+        local buttonhash = button or 0x07B8BEAF
+        local holdbutton = hold or false
+        UsePrompt = PromptRegisterBegin()
+        PromptSetControlAction(UsePrompt, buttonhash)
+        str = CreateVarString(10, 'LITERAL_STRING', str)
+        PromptSetText(UsePrompt, str)
+        PromptSetEnabled(UsePrompt, false)
+        PromptSetVisible(UsePrompt, false)
+        PromptSetHoldMode(UsePrompt, holdbutton)
+        PromptRegisterEnd(UsePrompt)
+    end)
+end
+
+function EPrompt(text, button, hold)
+    Citizen.CreateThread(function()
+        ChangeStance=nil
+        local str = text or "Use"
+        local buttonhash = button or 0xD51B784F
+        local holdbutton = hold or false
+        ChangeStance = PromptRegisterBegin()
+        PromptSetControlAction(ChangeStance, buttonhash)
+        str = CreateVarString(10, 'LITERAL_STRING', str)
+        PromptSetText(ChangeStance, str)
+        PromptSetEnabled(ChangeStance, false)
+        PromptSetVisible(ChangeStance, false)
+        PromptSetHoldMode(ChangeStance, holdbutton)
+        PromptRegisterEnd(ChangeStance)
+    end)
+end
+
+--Proximity Prompt for taking down camera
+function SetupCameraPrompt()
+    Citizen.CreateThread(function()
+        cameraprompt=false
+        CameraPickup=nil
+        local str = 'Take Down Camera'
+        CameraPickup = PromptRegisterBegin()
+        PromptSetControlAction(CameraPickup, 0x3B24C470)
+        str = CreateVarString(10, 'LITERAL_STRING', str)
+        PromptSetText(CameraPickup, str)
+        PromptSetEnabled(CameraPickup, false)
+        PromptSetVisible(CameraPickup, false)
+        PromptSetHoldMode(CameraPickup, true)
+        PromptRegisterEnd(CameraPickup)
+    end)
+end
+
+--Places Camera Prop, Triggers Camera Animation, and removes Camera from Inventory
+RegisterNetEvent('camera:deploy')
+AddEventHandler('camera:deploy', function(source)
+    local _source = source
+	if camera == nil then
+		local x,y,z = table.unpack(GetOffsetFromEntityInWorldCoords(PlayerPedId(), -0.06, 0.75, -1.1))
+		camera = CreateObject(GetHashKey("P_CAMERA01X"), x,y,z, true, false, true)
+		SetEntityHeading(camera, GetEntityHeading(PlayerPedId())-180)
+		Anim(PlayerPedId(),"script_rc@masn@leadout@rc4","idle_base_mason",3500,1)
+		ExecuteCommand('close') -- Close the Inventory Window
+	end
+end)
+
+--Allows for pickup of camera: removes prop & adds back into inventory
+Citizen.CreateThread(function(source)
+	local _source = source
+	local player = PlayerPedId()
+    SetupCameraPrompt()
+	while true do
+		Citizen.Wait(1000)
+		local coordsf = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 0.45, 0.0)
+        local cameraprop = GetClosestObjectOfType(coordsf, 1.0, GetHashKey("P_CAMERA01X"), false)
+        if cameraprop ~= 0 then
+			if cameraprompt == false then
+				PromptSetEnabled(CameraPickup, true)
+				PromptSetVisible(CameraPickup, true)
+				cameraprompt = true
+			end
+			if PromptHasHoldModeCompleted(CameraPickup) then
+				PromptSetEnabled(CameraPickup, false)
+				PromptSetVisible(CameraPickup, false)
+				cameraprompt = false
+				DeleteEntity(camera)
+				camera = nil
+				TriggerServerEvent('prop:camerapickup')
+				StopAnim("script_rc@masn@leadout@rc4","idle_base_mason")
+			end
+		else
+			if cameraprompt == true then
+			    PromptSetEnabled(CameraPickup, false)
+			    PromptSetVisible(CameraPickup, false)
+			    cameraprompt = false
+			end
+            Wait(3000)
+		end
+	end
+end)
+
 --Ledger animation
 RegisterNetEvent('prop:ledger')
 AddEventHandler('prop:ledger', function() 
@@ -324,6 +832,164 @@ AddEventHandler('prop:ledger', function()
     end
 end)
 
+
+---Animations for Drinkin Booze, I dont use since i use poke_licor, but might be of use for helpful snippets
+
+
+-- --Beer drinking animation
+-- RegisterNetEvent('prop:beer')
+-- AddEventHandler('prop:beer', function() 
+--     PlaySoundFrontend("Core_Full", "Consumption_Sounds", true, 0)
+-- 	ExecuteCommand('close')
+--     FPrompt("Finish Drinking", 0x3B24C470, false)
+--     local ped = PlayerPedId()
+--     local male = IsPedMale(ped)
+--     local x,y,z = table.unpack(GetEntityCoords(ped, true))
+--     local beer = CreateObject(GetHashKey('p_bottleBeer01x'), x, y, z + 0.2, true, true, true)
+--     local boneIndex = GetEntityBoneIndexByName(ped, "SKEL_R_Finger12")
+--     if male then
+--     if not IsEntityPlayingAnim(ped, "amb_rest_drunk@world_human_drinking@male_a@idle_a", "idle_a", 3) then
+--         Wait(100)
+--         Anim(ped,"amb_rest_drunk@world_human_drinking@male_a@idle_a","idle_a",-1,31)
+--         AttachEntityToEntity(beer, ped,boneIndex, 0.07, -0.0200, 0.12250, 0.024, -160.0, -40.0, true, true, false, true, 1, true)
+--         Wait(1000)
+--     end
+--     else --if female
+--     if not IsEntityPlayingAnim(ped, "amb_rest_drunk@world_human_drinking@female_a@idle_a", "idle_b", 3) then
+--         Wait(100)
+--         Anim(ped,"amb_rest_drunk@world_human_drinking@female_a@idle_a","idle_b",-1,31)
+--         AttachEntityToEntity(beer, ped,GetEntityBoneIndexByName(ped, "SKEL_R_Hand"), 0.035, -0.03, -0.068, -50.0, 65.0, 0.0, true, true, false, true, 1, true)
+--         Wait(1000)
+--     end
+--     end
+
+--     if proppromptdisplayed == false then
+-- 		PromptSetEnabled(PropPrompt, true)
+-- 		PromptSetVisible(PropPrompt, true)
+-- 		proppromptdisplayed = true
+-- 	end
+
+--     while IsEntityPlayingAnim(ped, "amb_rest_drunk@world_human_drinking@male_a@idle_a", "idle_a", 3)
+--        or IsEntityPlayingAnim(ped, "amb_rest_drunk@world_human_drinking@female_a@idle_a", "idle_b", 3) do
+--         Wait(1)
+-- 		if IsControlJustReleased(0, 0x3B24C470) then
+-- 			PromptSetEnabled(PropPrompt, false)
+-- 			PromptSetVisible(PropPrompt, false)
+-- 			proppromptdisplayed = false
+
+--             if male then
+--                 StopAnimTask(ped, 'amb_rest_drunk@world_human_drinking@male_a@idle_a', "idle_a", 1.0)
+--                 Wait(10)
+--                 Anim(ped,"amb_wander@upperbody_player_discard_items@whiskey@arthur@trans","whiskey_trans_nodrink",-1, 24)
+--                 Wait(5650)
+--                 local rx, ry, rz = table.unpack(GetEntityRotation(beer, true))
+--                 local facing = math.rad(GetEntityHeading(ped))
+--                 DetachEntity(beer, true, true)
+--                 SetEntityRotation(beer, rx,ry,rz, 1, true)
+--                 SetEntityVelocity(beer, math.cos(facing), math.sin(facing), 1.5)
+--             else
+--                 StopAnimTask(PlayerPedId(), 'amb_rest_drunk@world_human_drinking@female_a@idle_a', "idle_b", 1.0)
+--                 Wait(1000)
+--                 DetachEntity(beer, true, true)
+--                 ClearPedSecondaryTask(ped)
+--             end
+-- 			break
+-- 		end
+--     end
+--     PromptSetEnabled(PropPrompt, false)
+-- 	PromptSetVisible(PropPrompt, false)
+-- 	proppromptdisplayed = false
+--     if male then
+--         StopAnimTask(ped, 'amb_rest_drunk@world_human_drinking@male_a@idle_a', "idle_a", 1.0)
+--         local rx, ry, rz = table.unpack(GetEntityRotation(beer, true))
+--         DetachEntity(beer, true, true)
+--         ClearPedSecondaryTask(ped)
+--         RemoveAnimDict("amb_rest_drunk@world_human_drinking@male_a@idle_a")
+--     else
+--         StopAnimTask(PlayerPedId(), 'amb_rest_drunk@world_human_drinking@female_a@idle_a', "idle_b", 1.0)
+--         DetachEntity(beer, true, true)
+--         ClearPedSecondaryTask(ped)
+--         RemoveAnimDict("amb_rest_drunk@world_human_drinking@female_a@idle_a")
+--     end
+-- end)
+
+-- --Whisky drinking animation
+-- RegisterNetEvent('prop:whiskey')
+-- AddEventHandler('prop:whiskey', function() 
+--     PlaySoundFrontend("Core_Full", "Consumption_Sounds", true, 0)
+-- 	ExecuteCommand('close')
+--     FPrompt("Finish Drinking", 0x3B24C470, false)
+--     local ped = PlayerPedId()
+--     local male = IsPedMale(ped)
+--     local x,y,z = table.unpack(GetEntityCoords(ped, true))
+--     local beer = CreateObject(GetHashKey('p_cs_shotglass01x'), x, y, z + 0.2, true, true, true)
+--     local boneIndex = GetEntityBoneIndexByName(ped, "SKEL_R_Finger12")
+--     if male then
+--         if not IsEntityPlayingAnim(ped, "amb_rest_drunk@world_human_drinking@male_a@idle_a", "idle_a", 3) then
+--             Wait(100)
+--             Anim(ped,"amb_rest_drunk@world_human_drinking@male_a@idle_a","idle_a",-1,31)
+--             AttachEntityToEntity(beer, ped,boneIndex, 0.02, -0.0200, 0.02250, 0.024, -160.0, -40.0, true, true, false, true, 1, true)
+--             Wait(1000)
+--         end
+--     else --if female
+--         if not IsEntityPlayingAnim(ped, "amb_rest_drunk@world_human_drinking@female_a@idle_a", "idle_b", 3) then
+--             Wait(100)
+--             Anim(ped,"amb_rest_drunk@world_human_drinking@female_a@idle_a","idle_b",-1,31)
+--             AttachEntityToEntity(beer, ped,GetEntityBoneIndexByName(ped, "SKEL_R_Finger12"), 0.0, -0.05, 0.02, -150.0, 0.0, 0.0, true, true, false, true, 1, true)
+--             Wait(1000)
+--         end
+--     end
+
+--     if proppromptdisplayed == false then
+-- 		PromptSetEnabled(PropPrompt, true)
+-- 		PromptSetVisible(PropPrompt, true)
+-- 		proppromptdisplayed = true
+-- 	end
+
+--     while IsEntityPlayingAnim(ped, "amb_rest_drunk@world_human_drinking@male_a@idle_a", "idle_a", 3)
+--        or IsEntityPlayingAnim(ped, "amb_rest_drunk@world_human_drinking@female_a@idle_a", "idle_b", 3) do
+--         Wait(1)
+-- 		if IsControlJustReleased(0, 0x3B24C470) then
+-- 			PromptSetEnabled(PropPrompt, false)
+-- 			PromptSetVisible(PropPrompt, false)
+-- 			proppromptdisplayed = false
+
+--             if male then
+--                 StopAnimTask(ped, 'amb_rest_drunk@world_human_drinking@male_a@idle_a', "idle_a", 1.0)
+--                 Wait(10)
+--                 Anim(ped,"amb_wander@upperbody_player_discard_items@whiskey@arthur@trans","whiskey_trans_nodrink",-1, 24)
+--                 Wait(5650)
+--                 local rx, ry, rz = table.unpack(GetEntityRotation(beer, true))
+--                 local facing = math.rad(GetEntityHeading(ped))
+--                 DetachEntity(beer, true, true)
+--                 SetEntityRotation(beer, rx,ry,rz, 1, true)
+--                 SetEntityVelocity(beer, math.cos(facing), math.sin(facing), 1.5)
+--             else
+--                 StopAnimTask(PlayerPedId(), 'amb_rest_drunk@world_human_drinking@female_a@idle_a', "idle_b", 1.0)
+--                 Wait(1000)
+--                 DetachEntity(beer, true, true)
+--                 ClearPedSecondaryTask(ped)
+--             end
+-- 			break
+-- 		end
+--     end
+--     PromptSetEnabled(PropPrompt, false)
+-- 	PromptSetVisible(PropPrompt, false)
+-- 	proppromptdisplayed = false
+--     if male then
+--         StopAnimTask(ped, 'amb_rest_drunk@world_human_drinking@male_a@idle_a', "idle_a", 1.0)
+--         local rx, ry, rz = table.unpack(GetEntityRotation(beer, true))
+--         DetachEntity(beer, true, true)
+--         ClearPedSecondaryTask(ped)
+--         RemoveAnimDict("amb_rest_drunk@world_human_drinking@male_a@idle_a")
+--     else
+--         StopAnimTask(PlayerPedId(), 'amb_rest_drunk@world_human_drinking@female_a@idle_a', "idle_b", 1.0)
+--         DetachEntity(beer, true, true)
+--         ClearPedSecondaryTask(ped)
+--         RemoveAnimDict("amb_rest_drunk@world_human_drinking@female_a@idle_a")
+--     end
+-- end)
+
 --PocketWatch
 RegisterNetEvent('prop:watch')
 AddEventHandler('prop:watch', function() 
@@ -375,10 +1041,10 @@ end, false)
 
 --Book
 RegisterNetEvent('prop:book')
-AddEventHandler('prop:book', function() 
+AddEventHandler('prop:book', function()
     FPrompt()
     ExecuteCommand('close')
-        
+
     TaskStartScenarioInPlace(PlayerPedId(), GetHashKey("WORLD_HUMAN_SIT_GROUND_READING_BOOK"), -1, true, "StartScenario", 0, false)
     Wait(1)
 
@@ -790,7 +1456,7 @@ end)
 
 --Pipe
 RegisterNetEvent('prop:pipe')
-AddEventHandler('prop:pipe', function()
+AddEventHandler('prop:pipe', function() 
     FPrompt("Put Away", 0x3B24C470, false)
     LMPrompt("Use", 0x07B8BEAF, false)
     EPrompt("Pose", 0xD51B784F, false)
@@ -800,7 +1466,7 @@ AddEventHandler('prop:pipe', function()
     local x,y,z = table.unpack(GetEntityCoords(ped, true))
     local pipe = CreateObject(GetHashKey('P_PIPE01X'), x, y, z + 0.2, true, true, true)
     local righthand = GetEntityBoneIndexByName(ped, "SKEL_R_Finger13")
-
+    
     AttachEntityToEntity(pipe, ped, righthand, 0.005, -0.045, 0.0, -170.0, 10.0, -15.0, true, true, false, true, 1, true)
     Anim(ped,"amb_wander@code_human_smoking_wander@male_b@trans","nopipe_trans_pipe",-1,30)
     Wait(9000)
@@ -839,7 +1505,7 @@ AddEventHandler('prop:pipe', function()
             ClearPedTasks(ped)
             Wait(10)
 		end
-
+        
         if IsControlJustReleased(0, 0xD51B784F) then
             Anim(ped, "amb_rest@world_human_smoking@pipe@proper@male_d@wip_base", "wip_base", -1, 30)
             Wait(5000)
@@ -934,7 +1600,7 @@ AddEventHandler('prop:fan', function()
             ClearPedTasks(ped)
             Wait(10)
 		end
-
+        
         if IsControlJustReleased(0, 0x07B8BEAF) then
             Wait(500)
             if IsControlPressed(0, 0x07B8BEAF) then
@@ -970,7 +1636,7 @@ end)
 --Chewing Tobacco
 RegisterNetEvent('prop:chewingtobacco')
 AddEventHandler('prop:chewingtobacco', function()
-
+    
     FPrompt("Finish", 0x3B24C470, false)
     LMPrompt("Do Something", 0x07B8BEAF, false)
     EPrompt("Change Stance", 0xD51B784F, false)
@@ -982,7 +1648,7 @@ AddEventHandler('prop:chewingtobacco', function()
     local basedict = "amb_misc@world_human_chew_tobacco@male_a@base"
     local basedictB = "amb_misc@world_human_chew_tobacco@male_b@base"
     local MaleA =
-        {
+        { 
             [1] = { ['dict'] = "amb_misc@world_human_chew_tobacco@male_a@idle_a", ['anim'] = "idle_a"},
             [2] = { ['dict'] = "amb_misc@world_human_chew_tobacco@male_a@idle_a", ['anim'] = "idle_b"},
             [3] = { ['dict'] = "amb_misc@world_human_chew_tobacco@male_a@idle_a", ['anim'] = "idle_c"},
@@ -997,7 +1663,7 @@ AddEventHandler('prop:chewingtobacco', function()
             [9] = { ['dict'] = "amb_misc@world_human_chew_tobacco@male_a@idle_d", ['anim'] = "idle_l"}
         }
     local MaleB =
-        {
+        { 
             [1] = { ['dict'] = "amb_misc@world_human_chew_tobacco@male_b@idle_a", ['anim'] = "idle_a"},
             [2] = { ['dict'] = "amb_misc@world_human_chew_tobacco@male_b@idle_a", ['anim'] = "idle_b"},
             [3] = { ['dict'] = "amb_misc@world_human_chew_tobacco@male_b@idle_a", ['anim'] = "idle_c"},
@@ -1031,7 +1697,7 @@ AddEventHandler('prop:chewingtobacco', function()
     DeleteEntity(chewingtobacco)
     Wait(3500)
     Anim(ped,basedict,"base",-1,31, 0)
-
+    
     while not IsEntityPlayingAnim(ped,basedict,"base", 3) do
         Wait(100)
     end
@@ -1064,7 +1730,7 @@ AddEventHandler('prop:chewingtobacco', function()
             ClearPedTasks(ped)
             Wait(10)
 		end
-
+        
         if IsControlJustReleased(0, 0x07B8BEAF) then
             local random = math.random(1,9)
             if stance == "MaleA" then
@@ -1111,7 +1777,7 @@ AddEventHandler('prop:chewingtobacco', function()
                 Anim(ped, basedictB, "base", -1, 30, 0)
                 while not IsEntityPlayingAnim(ped,basedictB, "base", 3) do
                     Wait(100)
-                end
+                end    
                 PromptSetEnabled(PropPrompt, true)
                 PromptSetVisible(PropPrompt, true)
                 PromptSetEnabled(UsePrompt, true)
@@ -1233,7 +1899,7 @@ Citizen.CreateThread(function()
 	timeout = 5
     while (not HasAnimDictLoaded(dict) and timeout>0) do
 		timeout = timeout-1
-        if timeout == 0 then
+        if timeout == 0 then 
             --print("Animation Failed to Load")
 		end
 		Citizen.Wait(300)
@@ -1258,18 +1924,19 @@ AddEventHandler('horse:haycube', function(source)
     local _source = source
         if SulCavallo then
             local Cavallo = GetMount(Ped)
-
+  
+                
                 TaskAnimalInteraction(Ped, Cavallo, -224471938, true, true) --Animazione
-
+                
                 local valueHealth = Citizen.InvokeNative(0x36731AC041289BB1, Cavallo, 0)
                 local valueStamina = Citizen.InvokeNative(0x36731AC041289BB1, Cavallo, 1)
-
+                    
                     if not tonumber(valueHealth) then valueHealth = 0 end
                     if not tonumber(valueStamina) then valueStamina = 0 end
                 Citizen.Wait(3500)
                 Citizen.InvokeNative(0xC6258F41D86676E0, Cavallo, 0, valueHealth + 15)
                 Citizen.InvokeNative(0xC6258F41D86676E0, Cavallo, 1, valueStamina + 15)
-
+            
         else
         TaskItemInteraction(PlayerPedId(), nil, GetHashKey("EAT_MULTI_BITE_FOOD_SPHERE_D8-2_SANDWICH_QUICK_LEFT_HAND"), true, 0, 0)
             Citizen.Wait(1000)
@@ -1277,11 +1944,12 @@ AddEventHandler('horse:haycube', function(source)
                 if number then
                 print (number)
                 Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(),1, number + 25)
-                else
+                else 
                 Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(),1, 25)
                 end
                 Citizen.Wait(1000)
-
+        --end
+        
         end
 end)
 
@@ -1292,14 +1960,14 @@ AddEventHandler('horse:horsestimulant', function(source)
     local Ped = PlayerPedId()
     local SulCavallo = IsPedOnMount(Ped)
     local _source = source
-
+        
             local Cavallo = GetMount(Ped)
-
+                
                 TaskAnimalInteraction(PlayerPedId(), Cavallo,-1355254781, 0, 0) --stem
 
                 local valueHealth = Citizen.InvokeNative(0x36731AC041289BB1, Cavallo, 0)
                 local valueStamina = Citizen.InvokeNative(0x36731AC041289BB1, Cavallo, 1)
-
+                    
                     if not tonumber(valueHealth) then valueHealth = 0 end
                     if not tonumber(valueStamina) then valueStamina = 0 end
                 Citizen.Wait(3500)
@@ -1309,11 +1977,12 @@ AddEventHandler('horse:horsestimulant', function(source)
 
                 Citizen.InvokeNative(0xF6A7C08DF2E28B28, Cavallo, 0, 1000.0)
                 Citizen.InvokeNative(0xF6A7C08DF2E28B28, Cavallo, 1, 1000.0)
-
+                    
                 Citizen.InvokeNative(0x50C803A4CD5932C5, true) --core
                 Citizen.InvokeNative(0xD4EE21B7CC7FD350, true) --core
                 PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
 end)
+        
 
 RegisterNetEvent('horse:brush')
 AddEventHandler('horse:brush', function(source)
