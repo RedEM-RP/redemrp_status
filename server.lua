@@ -2,12 +2,12 @@ Inventory = {}
 TriggerEvent("redemrp_inventory:getData", function(call)
     Inventory = call
 end)
---[[
+
 data2 = {}
 TriggerEvent("redemrp_inventory:getData",function(call)
     data2 = call
 end)
-]]
+
 local PlayersStatus = {}
 
 AddEventHandler("redemrp:playerLoaded", function(source, user)
@@ -180,22 +180,22 @@ AddEventHandler("RegisterUsableItem:lemonade", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-					if data.thirst + 25 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+					if data.thirst + 25 <= 100 then
                             statusUsers[number]["thirst"] = data.thirst + 25
 							else
 							statusUsers[number]["thirst"] = 100
 					end
-                    			
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "lemonade")
-					itemData.RemoveItem(1)			
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "lemonade")
+					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:drinking', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus',data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:herbal_tea")
@@ -204,22 +204,22 @@ AddEventHandler("RegisterUsableItem:herbal_tea", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-					if data.thirst + 25 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+					if data.thirst + 25 <= 100 then
                             statusUsers[number]["thirst"] = data.thirst + 25
 							else
 							statusUsers[number]["thirst"] = 100
 					end
-                    			
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "herbal_tea")
-					itemData.RemoveItem(1)			
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "herbal_tea")
+					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:drinking', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus',data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:minttea")
@@ -228,22 +228,22 @@ AddEventHandler("RegisterUsableItem:minttea", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-					if data.thirst + 25 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+					if data.thirst + 25 <= 100 then
                             statusUsers[number]["thirst"] = data.thirst + 25
 							else
 							statusUsers[number]["thirst"] = 100
 					end
-                    			
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "minttea")
-					itemData.RemoveItem(1)			
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "minttea")
+					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:drinking', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus',data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:coffee")
@@ -260,10 +260,50 @@ AddEventHandler("RegisterUsableItem:coffee", function(source)
 							statusUsers[number]["thirst"] = 100
 					end
 
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "coffee")
+					local itemData = data2.getItem(tonumber(data.zrodlo), "coffee")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:drinking', data.zrodlo)
 					Wait(500)
+					TriggerClientEvent('redemrp_status:sendStatus',data.zrodlo, data.thirst, data.hunger)
+					end
+                end
+	end)
+end)
+
+RegisterServerEvent("redemrp_status:drinkingwater")
+AddEventHandler("redemrp_status:drinkingwater", function()
+ local _source = source
+	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
+	local _id = user.getIdentifier()
+	local _cid = user.getSessionVar("charid")
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+					if data.thirst + 20 <= 100 then
+                            statusUsers[number]["thirst"] = data.thirst + 20
+							else
+							statusUsers[number]["thirst"] = 100
+					end
+					TriggerClientEvent('redemrp_status:drinkingfromsea', _source)
+					TriggerClientEvent('redemrp_status:sendStatus',data.zrodlo, data.thirst, data.hunger)
+					end
+                end
+	end)
+end)
+
+RegisterServerEvent("redemrp_status:drinkingwater2")
+AddEventHandler("redemrp_status:drinkingwater2", function()
+ local _source = source
+	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
+	local _id = user.getIdentifier()
+	local _cid = user.getSessionVar("charid")
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+					if data.thirst + 35 <= 100 then
+                            statusUsers[number]["thirst"] = data.thirst + 35
+							else
+							statusUsers[number]["thirst"] = 100
+					end
+					TriggerClientEvent('redemrp_status:drinkingfromsea', _source)
 					TriggerClientEvent('redemrp_status:sendStatus',data.zrodlo, data.thirst, data.hunger)
 					end
                 end
@@ -291,6 +331,29 @@ AddEventHandler("redemrp_status:eatberry", function()
 	end)
 end)
 
+RegisterServerEvent("RegisterUsableItem:bread")
+AddEventHandler("RegisterUsableItem:bread", function(source)
+ local _source = source
+	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
+	local _id = user.getIdentifier()
+	local _cid = user.getSessionVar("charid")
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 10 <= 100 then
+                            statusUsers[number]["hunger"] = data.hunger + 10
+						else
+							statusUsers[number]["hunger"] = 100
+						end
+					local itemData = data2.getItem(tonumber(data.zrodlo), "bread")
+					itemData.RemoveItem(1)
+					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
+					Wait(500)
+					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
+					end
+                end
+	end)
+end)
+
 RegisterServerEvent("RegisterUsableItem:carrot")
 AddEventHandler("RegisterUsableItem:carrot", function(source)
  local _source = source
@@ -304,14 +367,14 @@ AddEventHandler("RegisterUsableItem:carrot", function(source)
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "carrot")
+					local itemData = data2.getItem(tonumber(data.zrodlo), "carrot")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
 					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:broccoli")
@@ -320,21 +383,21 @@ AddEventHandler("RegisterUsableItem:broccoli", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 15 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 15 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 15
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "broccoli")
-					itemData.RemoveItem(1)			
+					local itemData = data2.getItem(tonumber(data.zrodlo), "broccoli")
+					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:lettuce")
@@ -343,21 +406,21 @@ AddEventHandler("RegisterUsableItem:lettuce", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 10 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 10 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 10
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "lettuce")
-					itemData.RemoveItem(1)			
+					local itemData = data2.getItem(tonumber(data.zrodlo), "lettuce")
+					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:cooked_bread")
@@ -366,22 +429,22 @@ AddEventHandler("RegisterUsableItem:cooked_bread", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 12 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 12 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 12
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "cooked_bread")
-					itemData.RemoveItem(1)			
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "cooked_bread")
+					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:cooked_fish")
@@ -390,22 +453,22 @@ AddEventHandler("RegisterUsableItem:cooked_fish", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 15 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 15 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 15
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "cooked_fish")
-					itemData.RemoveItem(1)			
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "cooked_fish")
+					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:cooked_fish2")
@@ -414,23 +477,23 @@ AddEventHandler("RegisterUsableItem:cooked_fish2", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 25 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 25 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 25
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-				
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "cooked_fish2")
+
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "cooked_fish2")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:cooked_fish3")
@@ -439,17 +502,17 @@ AddEventHandler("RegisterUsableItem:cooked_fish3", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 	
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
 					statusUsers[number]["hunger"] = 100
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "cooked_fish3")
+					local itemData = data2.getItem(tonumber(data.zrodlo), "cooked_fish3")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 
@@ -460,22 +523,22 @@ AddEventHandler("RegisterUsableItem:cooked_corn", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 25 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 25 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 25
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "cooked_corn")
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "cooked_corn")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:stew")
@@ -484,23 +547,23 @@ AddEventHandler("RegisterUsableItem:stew", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 50 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 50 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 50
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "stew")
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "stew")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_inventory:closeinv', data.zrodlo)
 					TriggerClientEvent('redemrp_status:stew', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:stew2")
@@ -509,23 +572,23 @@ AddEventHandler("RegisterUsableItem:stew2", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 60 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 60 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 60
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "stew2")
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "stew2")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_inventory:closeinv', data.zrodlo)
 					TriggerClientEvent('redemrp_status:stew', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:stew3")
@@ -534,73 +597,23 @@ AddEventHandler("RegisterUsableItem:stew3", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 40 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 40 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 40
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "stew3")
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "stew3")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_inventory:closeinv', data.zrodlo)
 					TriggerClientEvent('redemrp_status:stew', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
-end)
-
-RegisterServerEvent("RegisterUsableItem:blueberrypie")
-AddEventHandler("RegisterUsableItem:blueberrypie", function(source)
- local _source = source
-	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
-	local _id = user.getIdentifier()
-	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 40 <= 100 then				
-                            statusUsers[number]["hunger"] = data.hunger + 40
-						else
-							statusUsers[number]["hunger"] = 100
-						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "blueberrypie")
-					itemData.RemoveItem(1)
-					TriggerClientEvent('redemrp_inventory:closeinv', data.zrodlo)
-					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
-					Wait(500)
-					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
-                end
-	end) 
-end)
-
-RegisterServerEvent("RegisterUsableItem:sugar_cookie")
-AddEventHandler("RegisterUsableItem:sugar_cookie", function(source)
- local _source = source
-	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
-	local _id = user.getIdentifier()
-	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 40 <= 100 then				
-                            statusUsers[number]["hunger"] = data.hunger + 20
-						else
-							statusUsers[number]["hunger"] = 100
-						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "sugar_cookie")
-					itemData.RemoveItem(1)
-					TriggerClientEvent('redemrp_inventory:closeinv', data.zrodlo)
-					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
-					Wait(500)
-					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
-                end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:cooked_meat")
@@ -609,22 +622,22 @@ AddEventHandler("RegisterUsableItem:cooked_meat", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 20 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 20 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 20
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "cooked_meat")
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "cooked_meat")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 RegisterServerEvent("RegisterUsableItem:capocollo")
@@ -633,22 +646,22 @@ AddEventHandler("RegisterUsableItem:capocollo", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 25 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 25 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 25
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "capocollo")
+
+					local itemData = data2.getItem(tonumber(data.zrodlo), "capocollo")
 					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 
@@ -658,52 +671,28 @@ AddEventHandler("RegisterUsableItem:apple", function(source)
 	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
 	local _id = user.getIdentifier()
 	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 10 <= 100 then				
+	        for number, data in pairs(statusUsers) do
+					if data.id == _id and data.cid == _cid and data.zrodlo == _source then
+						if data.hunger + 10 <= 100 then
                             statusUsers[number]["hunger"] = data.hunger + 10
 						else
 							statusUsers[number]["hunger"] = 100
 						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "apple")
-					itemData.RemoveItem(1)	
-					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
-					Wait(500)
-					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
-                end
-	end) 
-end)
 
-RegisterServerEvent("RegisterUsableItem:applepie")
-AddEventHandler("RegisterUsableItem:applepie", function(source)
- local _source = source
-	TriggerEvent('redemrp:getPlayerFromId', _source, function(user)
-	local _id = user.getIdentifier()
-	local _cid = user.getSessionVar("charid")
-	        for number, data in pairs(statusUsers) do          
-					if data.id == _id and data.cid == _cid and data.zrodlo == _source then 
-						if data.hunger + 12 <= 100 then				
-                            statusUsers[number]["hunger"] = data.hunger + 35
-						else
-							statusUsers[number]["hunger"] = 100
-						end
-                  
-					local itemData = Inventory.getItem(tonumber(data.zrodlo), "applepie")
-					itemData.RemoveItem(1)			
+					local itemData = data2.getItem(tonumber(data.zrodlo), "apple")
+					itemData.RemoveItem(1)
 					TriggerClientEvent('redemrp_status:eating', data.zrodlo)
 					Wait(500)
 					TriggerClientEvent('redemrp_status:sendStatus', data.zrodlo, data.thirst, data.hunger)
-					end		
+					end
                 end
-	end) 
+	end)
 end)
 
 -- RegisterServerEvent("RegisterUsableItem:cigarettes")
 -- AddEventHandler("RegisterUsableItem:cigarettes", function(source)
  -- local _source = source
-	-- local itemData = Inventory.getItem(_source, "cigarettes")
+	-- local itemData = data2.getItem(_source, "cigarettes")
 	-- itemData.RemoveItem(1)
 	-- TriggerClientEvent('redemrp_status:StartCigarette', _source)
 -- end)
@@ -712,7 +701,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:bagienneziele_pro")
 AddEventHandler("RegisterUsableItem:bagienneziele_pro", function(source)
  local _source = source
-	local itemData = Inventory.getItem(_source, "bagienneziele_pro")
+	local itemData = data2.getItem(_source, "bagienneziele_pro")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('redemrp_status:Bagienne', _source)
 end)
@@ -733,7 +722,7 @@ end)
 -- RegisterServerEvent("RegisterUsableItem:selfcigarettes")
 -- AddEventHandler("RegisterUsableItem:selfcigarettes", function(source)
  -- local _source = source
-	   	-- local itemData = Inventory.getItem(_source, "selfcigarettes")
+	   	-- local itemData = data2.getItem(_source, "selfcigarettes")
 	-- itemData.RemoveItem(1)
 	-- TriggerClientEvent('redemrp_status:StartCigarette', _source)
 -- end)
@@ -741,7 +730,7 @@ end)
 -- RegisterServerEvent("RegisterUsableItem:cigar")
 -- AddEventHandler("RegisterUsableItem:cigar", function(source)
  -- local _source = source
-		   	-- local itemData = Inventory.getItem(_source, "cigar")
+		   	-- local itemData = data2.getItem(_source, "cigar")
 	-- itemData.RemoveItem(1)
 	-- TriggerClientEvent('redemrp_status:StartCigar', _source)
 -- end)
@@ -749,7 +738,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:cigarettes")
 AddEventHandler("RegisterUsableItem:cigarettes", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "cigarettes")
+		   	local itemData = data2.getItem(_source, "cigarettes")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('prop:cigarettes', _source)
 end)
@@ -757,7 +746,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:hairpomade")
 AddEventHandler("RegisterUsableItem:hairpomade", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "hairpomade")
+		   	local itemData = data2.getItem(_source, "hairpomade")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('prop:hairpomade', _source)
 end)
@@ -765,7 +754,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:cigar")
 AddEventHandler("RegisterUsableItem:cigar", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "cigar")
+		   	local itemData = data2.getItem(_source, "cigar")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('prop:cigar', _source)
 end)
@@ -773,7 +762,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:notebook")
 AddEventHandler("RegisterUsableItem:notebook", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "notebook")
+		   	local itemData = data2.getItem(_source, "notebook")
 	--itemData.RemoveItem(1)
 	TriggerClientEvent('prop:ledger', _source)
 end)
@@ -781,7 +770,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:pocket_watch")
 AddEventHandler("RegisterUsableItem:pocket_watch", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "pocket_watch")
+		   	local itemData = data2.getItem(_source, "pocket_watch")
 	--itemData.RemoveItem(1)
 	TriggerClientEvent('prop:watch', _source)
 end)
@@ -789,7 +778,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:book")
 AddEventHandler("RegisterUsableItem:book", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "book")
+		   	local itemData = data2.getItem(_source, "book")
 	--itemData.RemoveItem(1)
 	TriggerClientEvent('prop:book', _source)
 end)
@@ -797,7 +786,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:pipe")
 AddEventHandler("RegisterUsableItem:pipe", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "pipe")
+		   	local itemData = data2.getItem(_source, "pipe")
 	--itemData.RemoveItem(1)
 	TriggerClientEvent('prop:pipe', _source)
 end)
@@ -805,7 +794,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:fan")
 AddEventHandler("RegisterUsableItem:fan", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "fan")
+		   	local itemData = data2.getItem(_source, "fan")
 	--itemData.RemoveItem(1)
 	TriggerClientEvent('prop:fan', _source)
 end)
@@ -813,7 +802,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:chewingtobacco")
 AddEventHandler("RegisterUsableItem:chewingtobacco", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "chewingtobacco")
+		   	local itemData = data2.getItem(_source, "chewingtobacco")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('prop:chewingtobacco', _source)
 end)
@@ -821,27 +810,27 @@ end)
 RegisterServerEvent("RegisterUsableItem:selfcigarettes")
 AddEventHandler("RegisterUsableItem:selfcigarettes", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "selfcigarettes")
-			local itemInventory = Inventory.getItem(_source, "cigarettes")
+		   	local itemData = data2.getItem(_source, "selfcigarettes")
+			local itemData2 = data2.getItem(_source, "cigarettes")
 	itemData.RemoveItem(1)
-	itemInventory.AddItem(15)
+	itemData2.AddItem(15)
 	--TriggerClientEvent('prop:cigarettes', _source)
 end)
 
 RegisterServerEvent("RegisterUsableItem:selfcigars")
 AddEventHandler("RegisterUsableItem:selfcigars", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "selfcigars")
-			local itemInventory = Inventory.getItem(_source, "cigar")
+		   	local itemData = data2.getItem(_source, "selfcigars")
+			local itemData2 = data2.getItem(_source, "cigar")
 	itemData.RemoveItem(1)
-	itemInventory.AddItem(10)
+	itemData2.AddItem(10)
 	--TriggerClientEvent('prop:cigarettes', _source)
 end)
 
 RegisterServerEvent("RegisterUsableItem:wine")
 AddEventHandler("RegisterUsableItem:wine", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "wine")
+		   	local itemData = data2.getItem(_source, "wine")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('redemrp_status:StartWine', _source)
 end)
@@ -849,7 +838,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:beer")
 AddEventHandler("RegisterUsableItem:beer", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "beer")
+		   	local itemData = data2.getItem(_source, "beer")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('redemrp_status:StartBeer', _source)
 end)
@@ -857,7 +846,7 @@ end)
 RegisterServerEvent("RegisterUsableItem:szampan")
 AddEventHandler("RegisterUsableItem:szampan", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "szampan")
+		   	local itemData = data2.getItem(_source, "szampan")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('redemrp_status:StartSzampan', _source)
 end)
@@ -865,21 +854,21 @@ end)
 RegisterServerEvent("RegisterUsableItem:moonshine")
 AddEventHandler("RegisterUsableItem:moonshine", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "moonshine")
+		   	local itemData = data2.getItem(_source, "moonshine")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('redemrp_status:StartMoonshine', _source)
 end)
 RegisterServerEvent("RegisterUsableItem:poor_whisky")
 AddEventHandler("RegisterUsableItem:poor_whisky", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "poor_whisky")
+		   	local itemData = data2.getItem(_source, "poor_whisky")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('redemrp_status:StartWhisky', _source)
 end)
 RegisterServerEvent("RegisterUsableItem:good_whisky")
 AddEventHandler("RegisterUsableItem:good_whisky", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "good_whisky")
+		   	local itemData = data2.getItem(_source, "good_whisky")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('redemrp_status:StartWhisky', _source)
 end)
@@ -887,14 +876,14 @@ end)
 RegisterServerEvent("RegisterUsableItem:consumable_haycube")
 AddEventHandler("RegisterUsableItem:consumable_haycube", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "consumable_haycube")
+		   	local itemData = data2.getItem(_source, "consumable_haycube")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('horse:haycube', _source)
 end)
 RegisterServerEvent("RegisterUsableItem:consumable_horse_stimulant")
 AddEventHandler("RegisterUsableItem:consumable_horse_stimulant", function(source)
  local _source = source
-		   	local itemData = Inventory.getItem(_source, "consumable_horse_stimulant")
+		   	local itemData = data2.getItem(_source, "consumable_horse_stimulant")
 	itemData.RemoveItem(1)
 	TriggerClientEvent('horse:horsestimulant', _source)
 end)
