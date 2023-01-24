@@ -126,8 +126,8 @@ body {
 	-ms-transform: scale(0.9);
 	transform: scale(0.9);
 	position: absolute;
-	bottom: -14.7vmin;
-	right: 5.7vmax;
+	bottom: -18.9vmin;
+	right: 6.3vmax;
 	position: absolute;
 	text-align: center;
 	margin: 15px 0;
@@ -169,7 +169,7 @@ body {
 	transform: scale(0.9);
 	position: absolute;
 	bottom: -6.5vmin;
-	right: 4.7vmax;
+	right: 6.3vmax;
 	position: absolute;
 	text-align: center;
 	margin: 15px 0;
@@ -205,48 +205,148 @@ body {
 	transform: translate(13px, 7px);
 }
 
+.huds .hud.stress {
+	-webkit-transform: scale(0.9);
+	-ms-transform: scale(0.9);
+	transform: scale(0.9);
+	position: absolute;
+	bottom: -14.7vmin;
+	right: 6.3vmax;
+	position: absolute;
+	text-align: center;
+	margin: 15px 0;
+}
+
+.huds .hud.stress span {
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 12px;
+	display: block;
+	margin-top: 0px;
+}
+
+.huds .hud.stress svg {
+	opacity: 1 !important;
+}
+
+.hud.stress span {
+	opacity: 0;
+	margin-top: -4px;
+}
+
+.hud.stress span:after {
+	position: absolute;
+	content: '%';
+	top: 1px;
+	right: 4px;
+	font-size: 7px;
+}
+
+.hud.stress g {
+	-webkit-transform: translate(3px, 3px) scale(0.9);
+	-ms-transform: translate(3px, 3px)  scale(0.9);
+	transform: translate(3px, 3px) scale(0.9);
+}
+
 .huds .hud.hunger {
 	-webkit-transform: scale(0.9);
 	-ms-transform: scale(0.9);
 	transform: scale(0.9);
 	position: absolute;
 	bottom: -10.5vmin;
-	right: 5.7vmax;
+	right: 6.3vmax;
 	position: absolute;
 	text-align: center;
 	margin: 15px 0;
 }
 
-@media (min-width: 2500px) and (max-width: 2560px) {
-	.huds .hud.hunger {
-		-webkit-transform: scale(1.2);
-		-ms-transform: scale(1.2);
-		transform: scale(1.2);
+@media (min-width: 1000px) and (max-width: 1400px) {
+	.huds .hud.thrist {
+		-webkit-transform: scale(0.7);
+		-ms-transform: scale(0.7);
+		transform: scale(0.7);
 		position: absolute;
-		bottom: -10.5vmin;
-		right: 5.7vmax;
+		bottom: -4.5vmin;
+		right: 5.3vmax;
 		position: absolute;
 		text-align: center;
 		margin: 15px 0;
 	}
-	.huds .hud.thrist {
-		-webkit-transform: scale(1.2);
-		-ms-transform: scale(1.2);
-		transform: scale(1.2);
+	.huds .hud.hunger {
+		-webkit-transform: scale(0.7);
+		-ms-transform: scale(0.7);
+		transform: scale(0.7);
 		position: absolute;
-		bottom: -6.5vmin;
-		right: 4.7vmax;
+		bottom: -8.5vmin;
+		right: 5.3vmax;
+		position: absolute;
+		text-align: center;
+		margin: 15px 0;
+	}
+	.huds .hud.stress {
+		-webkit-transform: scale(0.7);
+		-ms-transform: scale(0.7);
+		transform: scale(0.7);
+		position: absolute;
+		bottom: -12.7vmin;
+		right: 5.3vmax;
 		position: absolute;
 		text-align: center;
 		margin: 15px 0;
 	}
 	.huds .hud.temp {
-		-webkit-transform: scale(1.2);
-		-ms-transform: scale(1.2);
-		transform: scale(1.2);
+		-webkit-transform: scale(0.7);
+		-ms-transform: scale(0.7);
+		transform: scale(0.7);
+		position: absolute;
+		bottom: -16.9vmin;
+		right: 5.3vmax;
+		position: absolute;
+		text-align: center;
+		margin: 15px 0;
+	}
+}
+
+@media (min-width: 2500px) and (max-width: 2560px) {
+	.huds .hud.hunger {
+		-webkit-transform: scale(1.3);
+		-ms-transform: scale(1.3);
+		transform: scale(1.3);
+		position: absolute;
+		bottom: -10.5vmin;
+		right: 6.3vmax;
+		position: absolute;
+		text-align: center;
+		margin: 15px 0;
+	}
+	.huds .hud.thrist {
+		-webkit-transform: scale(1.3);
+		-ms-transform: scale(1.3);
+		transform: scale(1.3);
+		position: absolute;
+		bottom: -6.5vmin;
+		right: 6.3vmax;
+		position: absolute;
+		text-align: center;
+		margin: 15px 0;
+	}
+	.huds .hud.temp {
+		-webkit-transform: scale(1.3);
+		-ms-transform: scale(1.3);
+		transform: scale(1.3);
+		position: absolute;
+		bottom: -18.9vmin;
+		right: 6.3vmax;
+		position: absolute;
+		text-align: center;
+		margin: 15px 0;
+	}
+	.huds .hud.stress {
+		-webkit-transform: scale(1.3);
+		-ms-transform: scale(1.3);
+		transform: scale(1.3);
 		position: absolute;
 		bottom: -14.7vmin;
-		right: 5.7vmax;
+		right: 6.3vmax;
 		position: absolute;
 		text-align: center;
 		margin: 15px 0;
@@ -260,7 +360,7 @@ body {
 		transform: scale(1.6);
 		position: absolute;
 		bottom: -10.5vmin;
-		right: 5.7vmax;
+		right: 6.3vmax;
 		position: absolute;
 		text-align: center;
 		margin: 15px 0;
@@ -271,18 +371,29 @@ body {
 		transform: scale(1.6);
 		position: absolute;
 		bottom: -6.5vmin;
-		right: 4.7vmax;
+		right: 6.3vmax;
 		position: absolute;
 		text-align: center;
 		margin: 15px 0;
 	}
 	.huds .hud.temp {
-		-webkit-transform: scale(1.6);
-		-ms-transform: scale(1.6);
-		transform: scale(1.6);
+		-webkit-transform: scale(1.3);
+		-ms-transform: scale(1.3);
+		transform: scale(1.3);
+		position: absolute;
+		bottom: -18.9vmin;
+		right: 6.3vmax;
+		position: absolute;
+		text-align: center;
+		margin: 15px 0;
+	}
+	.huds .hud.stress {
+		-webkit-transform: scale(1.3);
+		-ms-transform: scale(1.3);
+		transform: scale(1.3);
 		position: absolute;
 		bottom: -14.7vmin;
-		right: 5.7vmax;
+		right: 6.3vmax;
 		position: absolute;
 		text-align: center;
 		margin: 15px 0;
@@ -314,9 +425,9 @@ body {
 }
 
 .hud.hunger g {
-	-webkit-transform: scale(1.7) translate(5px, 5px);
-	-ms-transform: scale(1.7) translate(5px, 5px);
-	transform: scale(1.7) translate(5px, 5px);
+	-webkit-transform: scale(1.7) translate(5px,6px);
+	-ms-transform: scale(1.7) translate(5px, 6px);
+	transform: scale(1.7) translate(5px, 6px);
 }
 
 .orangeStroke {

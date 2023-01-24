@@ -3,26 +3,30 @@ $(document).ready(function () {
   var thrist = 0;
   var hunger = 0;
   var temp = 0;
+  var stress = 0;
   var show = false;
   window.addEventListener("message", function (event) {
     if (event.data.showhud == undefined) {
       thrist = event.data.thrist;
       hunger = event.data.hunger;
       temp = event.data.temp;
+      stress = event.data.stress;
+      setProgressThrist(thrist, '.progress-thrist');
+      setProgressHunger(hunger, '.progress-hunger');
+      setProgressTemp(temp, '.progress-temp');
+      setProgressStress(stress, '.progress-stress');
     }
     if (event.data.showhud == true || event.data.showhud == false) {
       show = event.data.showhud;
     }
     if (show == true) {
-      $('#huds').fadeIn();
+      $('#huds').show();
       setProgressThrist(thrist, '.progress-thrist');
       setProgressHunger(hunger, '.progress-hunger');
       setProgressTemp(temp, '.progress-temp');
-    }
-    if (show == false) {
-      setTimeout(function () {
-        $('#huds').fadeOut();
-      }, 2000);
+      setProgressStress(stress, '.progress-stress');
+    } else {
+      $('#huds').hide();
     }
   });
 
@@ -41,6 +45,31 @@ $(document).ready(function () {
     }
     if (percent <= 10) {
       x.style.stroke = " #FF0245";
+    }
+
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = `${circumference}`;
+
+    const offset = circumference - ((-percent * 100) / 100) / 100 * circumference;
+    circle.style.strokeDashoffset = -offset;
+
+    html.text(Math.round(percent));
+  }
+
+  function setProgressStress(percent, element) {
+    var circle = document.querySelector(element);
+    var radius = circle.r.baseVal.value;
+    var circumference = radius * 2 * Math.PI;
+    var html = $(element).parent().parent().find('span');
+    var x4 = document.getElementById("test4");
+    if (percent < 60) {
+      x4.style.stroke = "#fff";
+    }
+    if (percent >= 60) {
+      x4.style.stroke = "#ffaf02";
+    }
+    if (percent >= 80) {
+      x4.style.stroke = " #FF0245";
     }
 
     circle.style.strokeDasharray = `${circumference} ${circumference}`;
