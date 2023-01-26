@@ -333,10 +333,10 @@ RegisterNetEvent('redemrp_status:UpdateStatus', function(thrist, hunger, stress)
         local healthCore = GetAttributeCoreValue(PlayerPedId(), 0) -- Get health core value
         Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, healthCore - 25) -- Set Health Core back to what it was
     end
-    if stress >= 60 then
+    if stress and stress >= 60 then
         RedEM.Functions.NotifyRight("You are feeling stressed out...", 4000)
     end
-    if stress >= 80 then
+    if stress and stress >= 80 then
         SetPedToRagdoll(PlayerPedId(), 3000, 5000, 0, 0, 0, 0)
         local Ragdoll = math.random(1,2)
         if Ragdoll == 1 then 

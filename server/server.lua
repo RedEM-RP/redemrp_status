@@ -62,13 +62,15 @@ function UpdatePlayersStatus()
                     if metadata.thirst - 0.3 >= 0.0 then
                         tempPlayer.SetMetaData("thirst", tonumber(string.format("%.2f", tonumber(metadata.thirst) - 0.3)))
                     end
-                    if metadata.stress >= 60.0 then
-                        if metadata.stress + 0.2 <= 100.0 then
-                            tempPlayer.SetMetaData("stress", tonumber(string.format("%.2f", tonumber(metadata.stress) + 0.2)))
-                        end
-                    else
-                        if metadata.stress - 0.1 >= 0.0 then
-                            tempPlayer.SetMetaData("stress", tonumber(string.format("%.2f", tonumber(metadata.stress) - 0.1)))
+                    if metadata.stress then 
+                        if metadata.stress >= 60.0 then
+                            if metadata.stress + 0.2 <= 100.0 then
+                                tempPlayer.SetMetaData("stress", tonumber(string.format("%.2f", tonumber(metadata.stress) + 0.2)))
+                            end
+                        else
+                            if metadata.stress - 0.1 >= 0.0 then
+                                tempPlayer.SetMetaData("stress", tonumber(string.format("%.2f", tonumber(metadata.stress) - 0.1)))
+                            end
                         end
                     end
                     TriggerClientEvent('redemrp_status:UpdateStatus', tonumber(playerId), tempPlayer.GetMetaData().thirst, tempPlayer.GetMetaData().hunger, tempPlayer.GetMetaData().stress)
