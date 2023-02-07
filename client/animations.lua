@@ -429,30 +429,6 @@ function Cigarette()
     ClearPedTasks(ped)
 end
 
-local pipeon = false
-
-
-RegisterNetEvent("redemrp_status:client:UseWeed", function()
-    TriggerServerEvent("redemrp_status:server:RelieveStress", 10)
-    if not pipeon then
-        Pipe(true, true)
-    end
-end)
-
-
-RegisterNetEvent("redemrp_status:client:UseOpium", function()
-    TriggerServerEvent("redemrp_status:server:RelieveStress", 20)
-    if not pipeon then
-        Pipe(true)
-    end
-end)
-
-RegisterNetEvent("redemrp_status:client:UseTobaccoPipe", function()
-    if not pipeon then
-        Pipe()
-    end
-end)
-
 function Pipe(healing, lesshealing)
     pipeon = true
     PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
@@ -843,6 +819,295 @@ function ChewingTobacco(buffed)
         EagleEyeTonicChew()
     end
 end
+
+
+function Coffe()
+    local object = CreateObject(GetHashKey("P_MUGCOFFEE01X"), GetEntityCoords(PlayerPedId()), true, false, false, false, true)
+    Citizen.InvokeNative(0x669655FFB29EF1A9, object, 0, "CTRL_cupFill", 1.0)
+    TaskItemInteraction_2(PlayerPedId(), GetHashKey("CONSUMABLE_COFFEE"), object, GetHashKey("P_MUGCOFFEE01X_PH_R_HAND"), GetHashKey("DRINK_COFFEE_HOLD"), 1, 0, -1082130432)
+end
+
+function Shampan()
+    TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('P_GLASS001X'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), GetHashKey("CONSUMABLE_WHISKEY"), propEntity, GetHashKey('P_GLASS001X_PH_R_HAND'), GetHashKey("DRINK_CHAMPAGNE_HOLD"), 1, 0, -1082130432)
+    while true do
+        Wait(500)
+        if Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 642357238 then
+            amount = amount + 1
+            if amount >= 7 then
+                DrunkTime = GetGameTimer()
+                IsDrunk = true
+                break
+            end
+        elseif Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+            break
+        else
+            amount = 0
+        end
+    end
+end
+
+function Drink()
+    local dict = "amb_rest_drunk@world_human_drinking@male_a@idle_a"
+    local playerPed = PlayerPedId()
+    local pos = GetEntityCoords(playerPed)
+    local prop = GetHashKey("P_BOTTLE008X")
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Citizen.Wait(10)
+    end
+    RequestModel(prop)
+    while not HasModelLoaded(prop) do
+        Wait(10)
+    end
+    local tempObj2 = CreateObject(prop, pos.x, pos.y, pos.z, true, true, false)
+    local boneIndex = GetEntityBoneIndexByName(playerPed, "SKEL_R_HAND")
+    AttachEntityToEntity(tempObj2, playerPed, boneIndex, 0.05, -0.07, -0.05, -75.0, 60.0, 0.0, true, true, false, true,  1, true)
+    TaskPlayAnim(PlayerPedId(), dict, "idle_a", 1.0, 8.0, -1, 31, 0, false, false, false)
+    Citizen.Wait(4000)
+    ClearPedTasks(PlayerPedId())
+    DeleteObject(tempObj2)
+    SetModelAsNoLongerNeeded(prop)
+end
+
+function Eat()
+    local dict = "mech_inventory@eating@multi_bite@sphere_d8-2_sandwich"
+    local playerPed = PlayerPedId()
+    local pos = GetEntityCoords(playerPed)
+    local prop = GetHashKey("P_BREAD05X")
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Citizen.Wait(10)
+    end
+    RequestModel(prop)
+    while not HasModelLoaded(prop) do
+        Wait(10)
+    end
+    local tempObj2 = CreateObject(prop, pos.x, pos.y, pos.z, true, true, false)
+    local boneIndex = GetEntityBoneIndexByName(playerPed, "SKEL_R_HAND")
+    AttachEntityToEntity(tempObj2, playerPed, boneIndex, 0.1, -0.01, -0.07, -90.0, 100.0, 0.0, true, true, false, true, 1, true)
+    TaskPlayAnim(PlayerPedId(), dict, "quick_right_hand", 1.0, 8.0, -1, 31, 0, false, false, false)
+    Citizen.Wait(2000)
+    ClearPedTasks(PlayerPedId())
+    DeleteObject(tempObj2)
+    SetModelAsNoLongerNeeded(prop)
+end
+
+function Beer()
+    TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('p_bottleBeer01x'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), GetHashKey("CONSUMABLE_SALOON_BEER"), propEntity,GetHashKey('p_bottleBeer01x_PH_R_HAND'), 1587785400, 1, 0, -1082130432)
+    while true do
+        Wait(500)
+        if Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1183277175 then
+            amount = amount + 1
+            if amount >= 11 then
+                DrunkTime = GetGameTimer()
+                IsDrunk = true
+                break
+            end
+        elseif Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+            break
+        else
+            amount = 0
+        end
+    end
+end
+
+function Whisky()
+    TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('p_bottleJD01x'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), -1199896558, propEntity, GetHashKey('p_bottleJD01x_ph_r_hand'), GetHashKey('DRINK_BOTTLE@Bottle_Cylinder_D1-3_H30-5_Neck_A13_B2-5_CHUG_TRANS'), 1, 0, -1.0)
+    while true do
+        Wait(500)
+        if Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1204708816 then
+            amount = amount + 1
+            if amount >= 6 then
+                DrunkTime = GetGameTimer()
+                IsDrunk = true
+                break
+            end
+        elseif Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+            break
+        else
+            amount = 0
+        end
+    end
+end
+
+function Pomade()
+    local ped = PlayerPedId()
+    if Citizen.InvokeNative(0xFB4891BD7578CDC1,  ped, tonumber(0x9925C067)) then
+        TaskItemInteraction(ped, 0, GetHashKey("APPLY_POMADE_WITH_HAT"), 1, 0, -1082130432)
+    else
+        TaskItemInteraction(ped, 0, GetHashKey("APPLY_POMADE_WITH_NO_HAT"), 1, 0, -1082130432)
+    end
+    Wait(1500)
+    Citizen.InvokeNative(0x66B957AAC2EAAEAB, ped, exports["redemrp_creator"]:GetBodyCurrentComponentHash("hair"), GetHashKey("POMADE"), 0, true, 1)
+    Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, false, true, true, true, false)
+end
+
+function Gin()
+    TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('s_inv_gin_used01x'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), -1199896558, propEntity, GetHashKey('p_bottleJD01x_ph_r_hand'), GetHashKey('DRINK_BOTTLE@Bottle_Cylinder_D1-3_H30-5_Neck_A13_B2-5_CHUG_TRANS'), 1, 0, -1.0)
+    while true do
+        Wait(500)
+        if Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1204708816 then
+            amount = amount + 1
+            if amount >= 7 then
+                DrunkTime = GetGameTimer()
+                IsDrunk = true
+                break
+            end
+        elseif Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+            break
+        else
+            amount = 0
+        end
+    end
+end
+
+function Rum()
+    TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('s_inv_usedrum01x'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), -1199896558, propEntity, GetHashKey('p_bottleJD01x_ph_r_hand'), GetHashKey('DRINK_BOTTLE@Bottle_Cylinder_D1-3_H30-5_Neck_A13_B2-5_CHUG_TRANS'), 1, 0, -1.0)
+    while true do
+        Wait(500)
+        if Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1204708816 then
+            amount = amount + 1
+            if amount >= 7 then
+                DrunkTime = GetGameTimer()
+                IsDrunk = true
+                break
+            end
+        elseif Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+            break
+        else
+            amount = 0
+        end
+    end
+end
+
+function Cognac()
+    TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('p_bottlecognac01x'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), -1199896558, propEntity, GetHashKey('p_bottleJD01x_ph_r_hand'), GetHashKey('DRINK_BOTTLE@Bottle_Cylinder_D1-3_H30-5_Neck_A13_B2-5_CHUG_TRANS'), 1, 0, -1.0)
+    while true do
+        Wait(500)
+        if Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1204708816 then
+            amount = amount + 1
+            if amount >= 6 then
+                DrunkTime = GetGameTimer()
+                IsDrunk = true
+                break
+            end
+        elseif Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+            break
+        else
+            amount = 0
+        end
+    end
+end
+
+function Moonshine()
+    TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('s_inv_moonshine01x'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), -1199896558, propEntity, GetHashKey('p_bottleJD01x_ph_r_hand'), GetHashKey('DRINK_BOTTLE@Bottle_Cylinder_D1-3_H30-5_Neck_A13_B2-5_CHUG_TRANS'), 1, 0, -1.0)
+    while true do
+        Wait(500)
+        if Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1204708816 then
+            amount = amount + 1
+            if amount >= 5 then
+                DrunkTime = GetGameTimer()
+                IsDrunk = true
+                break
+            end
+        elseif Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+            break
+        else
+            amount = 0
+        end
+    end
+end
+
+function Wine()
+    TriggerEvent("redemrp_inventory:closeinv")
+    local propEntity = CreateObject(GetHashKey('P_BOTTLEJD01X'), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
+    local amount = 0
+    TaskItemInteraction_2(PlayerPedId(), -1679900928, propEntity, GetHashKey('P_BOTTLEJD01X_PH_R_HAND'), -68870885, 1,  0, -1082130432)
+    while true do
+        Wait(500)
+        if Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == 1204708816 then
+            amount = amount + 1
+            if amount >= 11 then
+                IsDrunk = true
+                break
+            end
+        elseif Citizen.InvokeNative(0x6AA3DCA2C6F5EB6D, PlayerPedId()) == false then
+            break
+        else
+            amount = 0
+        end
+    end
+end
+
+function Bandage()
+    local playerPed = PlayerPedId()
+    if cooldown == 0 and not usingb then
+        usingb = true
+        TaskStartScenarioInPlace(playerPed, GetHashKey('WORLD_HUMAN_CROUCH_INSPECT'), 10000, true, false, false, false)
+        exports['progressBars']:startUI(10000, 'Bandaging...')
+        Wait(10000)
+        cooldown = 3000
+        startCooldown()
+        if GetAttributeCoreValue(playerPed, 0) + 30 <= 100 then
+        local addhp = GetAttributeCoreValue(playerPed, 0) + 30
+            Citizen.InvokeNative( 0xC6258F41D86676E0 ,playerPed, 0 ,addhp )
+		else
+            Citizen.InvokeNative( 0xC6258F41D86676E0 , playerPed, 0 ,100)
+        end		
+        usingb = false
+    else
+		Wait(1000)
+        TriggerEvent("redemrp_notification:start", "You have to wait: " .. cooldown/100 .. "seconds before applying another bandage!", 2, "error")
+    end
+end
+
+function MBandage()
+    local playerPed = PlayerPedId()
+    if cooldown == 0 and not usingb then
+        usingb = true
+        TaskStartScenarioInPlace(playerPed, GetHashKey('WORLD_HUMAN_CROUCH_INSPECT'), 10000, true, false, false, false)
+        exports['progressBars']:startUI(10000, 'Bandaging...')
+        Wait(10000)
+        cooldown = 3000
+        startCooldown()
+        Citizen.InvokeNative( 0xC6258F41D86676E0 , playerPed, 0 ,100)	
+        usingb = false
+    else
+		Wait(1000)
+        TriggerEvent("redemrp_notification:start", "You have to wait: " .. cooldown/100 .. "seconds before applying another bandage!", 2, "error")
+    end
+end
+
+function BoostStamina(amount)
+    if GetAttributeCoreValue(PlayerPedId(), 1) + amount <= 100 then
+        local addstamina = GetAttributeCoreValue(PlayerPedId(), 1) + amount
+        Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 1, addstamina)
+    else
+        Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 1, 100)
+    end
+end
+
 
 function Watch()
     RequestAnimDict('mech_inventory@item@pocketwatch@unarmed@base')

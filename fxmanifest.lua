@@ -17,17 +17,19 @@ files {
 shared_script 'config.lua'
 
 client_scripts {
-	'client/dataview.lua',
 	'client/animations.lua',
-	'client/client.lua',
+	'client/main.lua',
 }
 
 server_scripts {
 	'@oxmysql/lib/MySQL.lua',
-	'server/server.lua',
+	'server/main.lua',
 	'server/usables.lua',
 }
 
 client_exports {
 	'SetInInterior',
 }
+
+
+lua54 'yes'
