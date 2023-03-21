@@ -289,10 +289,10 @@ RegisterNetEvent('redemrp_status:UpdateStatus', function(thrist, hunger, stress)
         local healthCore = GetAttributeCoreValue(PlayerPedId(), 0) -- Get health core value
         Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, healthCore - 25) -- Set Health Core back to what it was
     end
-    if stress >= 60 then
+    if stress and stress >= 60 then
         RedEM.Functions.NotifyRight("You are feeling stressed out...", 4000)
     end
-    if stress >= 80 then
+    if stress and stress >= 80 then
         SetPedToRagdoll(PlayerPedId(), 3000, 5000, 0, 0, 0, 0)
         local Ragdoll = math.random(1,2)
         if Ragdoll == 1 then 
@@ -400,3 +400,70 @@ function startCooldown()
         end
     end)
 end
+
+------------ HORSE EVENTS
+RegisterNetEvent('horse:haycube')
+AddEventHandler('horse:haycube', function(source)
+
+    local Ped = PlayerPedId()
+    local SulCavallo = IsPedOnMount(Ped)
+    local _source = source
+        if SulCavallo then
+            local Cavallo = GetMount(Ped)
+
+                TaskAnimalInteraction(Ped, Cavallo, -224471938, true, true) --Animazione
+
+                local valueHealth = Citizen.InvokeNative(0x36731AC041289BB1, Cavallo, 0)
+                local valueStamina = Citizen.InvokeNative(0x36731AC041289BB1, Cavallo, 1)
+
+                    if not tonumber(valueHealth) then valueHealth = 0 end
+                    if not tonumber(valueStamina) then valueStamina = 0 end
+                Citizen.Wait(3500)
+                Citizen.InvokeNative(0xC6258F41D86676E0, Cavallo, 0, valueHealth + 15)
+                Citizen.InvokeNative(0xC6258F41D86676E0, Cavallo, 1, valueStamina + 15)
+
+        else
+        TaskItemInteraction(PlayerPedId(), nil, GetHashKey("EAT_MULTI_BITE_FOOD_SPHERE_D8-2_SANDWICH_QUICK_LEFT_HAND"), true, 0, 0)
+            Citizen.Wait(1000)
+                local number = Citizen.InvokeNative(0x36731AC041289BB1, PlayerPedId(), 1)
+                if number then
+                print (number)
+                Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(),1, number + 25)
+                else
+                Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(),1, 25)
+                end
+                Citizen.Wait(1000)
+        --end
+
+        end
+end)
+
+
+RegisterNetEvent('horse:horsestimulant')
+AddEventHandler('horse:horsestimulant', function(source)
+
+    local Ped = PlayerPedId()
+    local SulCavallo = IsPedOnMount(Ped)
+    local _source = source
+
+            local Cavallo = GetMount(Ped)
+
+                TaskAnimalInteraction(PlayerPedId(), Cavallo,-1355254781, 0, 0) --stem
+
+                local valueHealth = Citizen.InvokeNative(0x36731AC041289BB1, Cavallo, 0)
+                local valueStamina = Citizen.InvokeNative(0x36731AC041289BB1, Cavallo, 1)
+
+                    if not tonumber(valueHealth) then valueHealth = 0 end
+                    if not tonumber(valueStamina) then valueStamina = 0 end
+                Citizen.Wait(3500)
+                Citizen.InvokeNative(0xC6258F41D86676E0, Cavallo, 0, valueHealth + 35)
+                Citizen.InvokeNative(0xC6258F41D86676E0, Cavallo, 1, valueStamina + 35)
+
+
+                Citizen.InvokeNative(0xF6A7C08DF2E28B28, Cavallo, 0, 1000.0)
+                Citizen.InvokeNative(0xF6A7C08DF2E28B28, Cavallo, 1, 1000.0)
+
+                Citizen.InvokeNative(0x50C803A4CD5932C5, true) --core
+                Citizen.InvokeNative(0xD4EE21B7CC7FD350, true) --core
+                PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+end)
